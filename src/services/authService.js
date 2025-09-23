@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8083/back1/auth"; // Your backend URL
 
-const BACKEND_CONNECT = false; // false = use mock, true = call real backend
+const BACKEND_CONNECT = true; // false = use mock, true = call real backend
 
 // Mock login response JSON
 const mockLoginResponse = {
