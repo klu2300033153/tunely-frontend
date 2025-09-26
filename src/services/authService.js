@@ -16,9 +16,15 @@ const mockLoginResponse = {
 
 export const login = async (username, password) => {
   if (!BACKEND_CONNECT) {
-    if (username === "test" && password === "test") {
-      localStorage.setItem("token", mockLoginResponse.token);
-      return mockLoginResponse;
+    const storedUser = JSON.parse(localStorage.getItem("users")) || [];
+    
+    // Find user by username
+    const user = storedUser.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+      const token = "mock-jwt-token-1234567890"; // This is still a mock token in this case.
+      localStorage.setItem("token", token);
+      return { token, user }; // Return token and user for mock login
     } else {
       throw new Error("Invalid credentials!");
     }
@@ -31,6 +37,18 @@ export const login = async (username, password) => {
 
 export const signup = async (username, email, password) => {
   if (!BACKEND_CONNECT) {
+    // Check if user already exists
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (storedUsers.some(user => user.username === username)) {
+      throw new Error("User already exists!");
+    }
+
+    // Create new user and store in localStorage
+    const newUser = { username, email, password };
+    storedUsers.push(newUser);
+    localStorage.setItem("users", JSON.stringify(storedUsers));
+
     return { message: "Mock signup successful" };
   }
 
